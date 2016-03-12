@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "pdiff",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/main.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HiroakiMikami/pdiff.git"
+  },
+  "keywords": [
+    "diff", "cli"
+  ],
+  "author": "Hiroaki Mikami",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HiroakiMikami/pdiff/issues"
+  },
+  "homepage": "https://github.com/HiroakiMikami/pdiff#readme",
+  "dependencies": {
+    "diff": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  }
+}
