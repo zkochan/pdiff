@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/HiroakiMikami/pdiff#readme",
   "dependencies": {
-    "diff": "*"
+    "diff": "*",
+    "commander": "*",
+    "readline": "*"
   },
   "devDependencies": {
     "mocha": "*",
