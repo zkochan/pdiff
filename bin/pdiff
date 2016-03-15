@@ -197,7 +197,6 @@ Promise.all([readFile(file1), readFile(file2)]).then(
           }
           text += " ";
 
-          // ESC[30m～ESC[37m
           // Add the value of this line
           for (value of delta.values) {
             if (value.added) {
