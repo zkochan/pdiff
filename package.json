@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "pdiff",
   "version": "1.0.0",
   "description": "A better diffing tool",
