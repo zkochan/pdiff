@@ -4,9 +4,9 @@ var assert = require('assert');
 var chai = require("chai");
 chai.should();
 
-describe("pdiff", function() {
-  describe('#diff', function() {
-    it("should diff on word boundaries.", function() {
+describe("pdiff", () => {
+  describe('#diff', () => {
+    it("should diff on word boundaries.", () => {
       var result = pdiff.diff("var x = 10;", "var x = 20;");
 
       result.should.deep.equal([
@@ -28,7 +28,7 @@ describe("pdiff", function() {
         }
       ])
     })
-    it("should diff lines when a delta is large.", function() {
+    it("should diff lines when a delta is large.", () => {
       var result = pdiff.diff(
         [
           "function fib(n)",
