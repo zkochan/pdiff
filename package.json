@@ -2,7 +2,7 @@
   "private": true,
   "name": "pdiff",
   "version": "1.0.0",
-  "description": "",
+  "description": "A better diffing tool",
   "main": "lib/main.js",
   "scripts": {
     "test": "mocha -R spec"
