@@ -91,13 +91,6 @@ describe("pdiff", function() {
             added: true,
             value: "20"
           }]
-        },
-        {
-          lineNumberOfLhs: 1,
-          lineNumberOfRhs: 1,
-          values: [{
-            value: ""
-          }]
         }
       ])
     })
@@ -115,21 +108,11 @@ describe("pdiff", function() {
           }]
         },
         {
-          lineNumberOfLhs: 1,
           lineNumberOfRhs: 1,
           values: [
             {
               added: true,
               value: "test: 20"
-            }
-          ]
-        },
-        {
-          lineNumberOfRhs: 2,
-          values: [
-            {
-              added: true,
-              value: ""
             }
           ]
         }
@@ -150,17 +133,9 @@ describe("pdiff", function() {
         },
         {
           lineNumberOfLhs: 1,
-          lineNumberOfRhs: 1,
           values: [{
             removed: true,
             value: "test: 20"
-          }]
-        },
-        {
-          lineNumberOfLhs: 2,
-          values: [{
-            removed: true,
-            value: ""
           }]
         }
       ])
@@ -193,15 +168,30 @@ describe("pdiff", function() {
               value: "test: 10"
             }
           ]
+        }
+      ])
+    })
+    it("should deal with the buggy case(https://github.com/HiroakiMikami/pdiff/issues/12)", () => {
+      pdiff.addLineNumbers(pdiff.diff(
+        "{\nprivate: true\n}\n",
+        "{\n}\n"
+      )).should.deep.equal([
+        {
+          lineNumberOfLhs: 0,
+          lineNumberOfRhs: 0,
+          values: [{value: "{"}]
         },
         {
           lineNumberOfLhs: 1,
-          lineNumberOfRhs: 2,
-          values: [
-            {
-              value: ""
-            }
-          ]
+          values: [{
+            removed: true,
+            value: "private: true"
+          }]
+        },
+        {
+          lineNumberOfLhs: 2,
+          lineNumberOfRhs: 1,
+          values: [{value: "}"}]
         }
       ])
     })
@@ -232,18 +222,10 @@ describe("pdiff", function() {
         ],
         [
           {
-            lineNumberOfLhs: 2,
             lineNumberOfRhs: 2,
             values: [{
               added: true,
               value: "test: 10"
-            }]
-          },
-          {
-            lineNumberOfRhs: 3,
-            values: [{
-              added: true,
-              value: ""
             }]
           }
         ]
