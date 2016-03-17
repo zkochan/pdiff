@@ -12,7 +12,7 @@ var file2 = null;
 // Parse a command line arguments
 commander
   .version('0.0.1')
-  .option('-l --line <num>', 'Output num (default 0) lines shown in diff', parseInt)
+  .option('-l --line <num>', 'Output num (default -1) lines shown in diff', parseInt)
   .option('-c --color', 'Color mode')
   .option('-h --html', 'HTML mode')
   .arguments("<file1> <file2>")
@@ -59,111 +59,132 @@ Promise.all([readFile(file1), readFile(file2)]).then(
     var content2 = results[1];
 
     // Calculate diff
-    var diff = pdiff.addLineNumbers(pdiff.diff(content1, content2));
+    var line = (commander.line == undefined) ? -1 : commander.line;
+    var diff_ = pdiff.addLineNumbers(pdiff.diff(content1, content2));
+    var diff = pdiff.extractDiff(diff_, line);
 
     // Output diff
-    var line = (commander.line == undefined) ? 0 : commander.line;
-
-    var maxLine = diff.length;
+    var maxLine = diff_.length;
     var digit = String(maxLine).length;
 
     if (commander.html) {
-      for (delta of diff) {
-        var text = "<div class='line'>";
-        // Add line numbers
-        if (delta.lineNumberOfLhs != undefined) {
-          text += "<span class='line-number lhs'>" + delta.lineNumberOfLhs + "</span>"
-        } else {
-          text += "<span class='line-number no-lhs'></span>"
-        }
-        if (delta.lineNumberOfRhs != undefined) {
-          text += "<span class='line-number rhs'>" + delta.lineNumberOfRhs + "</span>"
-        } else {
-          text += "<span class='line-number no-rhs'></span>"
-        }
-
-        // Add the value of this line
-        text += "<span class='value'>";
-        for (value of delta.values) {
-          if (value.added) {
-            text += "<span class='added'>" + value.value + "</span>";
-          } else if (value.removed) {
-            text += "<span class='removed'>" + value.value + "</span>";
+      for (var i = 0; i < diff.length; i++) {
+        var group = diff[i];
+        for (delta of group) {
+          var text = "<div class='line'>";
+          // Add line numbers
+          if (delta.lineNumberOfLhs != undefined) {
+            text += "<span class='line-number lhs'>" + delta.lineNumberOfLhs + "</span>"
           } else {
-            text += value.value;
+            text += "<span class='line-number no-lhs'></span>"
           }
-        }
-        text += "</span>"
-        text += "</div>"
+          if (delta.lineNumberOfRhs != undefined) {
+            text += "<span class='line-number rhs'>" + delta.lineNumberOfRhs + "</span>"
+          } else {
+            text += "<span class='line-number no-rhs'></span>"
+          }
 
-        // Ouput the delta
-        console.log(text);
+          // Add the value of this line
+          text += "<span class='value'>";
+          for (value of delta.values) {
+            if (value.added) {
+              text += "<span class='added'>" + value.value + "</span>";
+            } else if (value.removed) {
+              text += "<span class='removed'>" + value.value + "</span>";
+            } else {
+              text += value.value;
+            }
+          }
+          text += "</span>"
+          text += "</div>"
+
+          // Ouput the delta
+          console.log(text);
+        }
+
+        if (i != diff.length - 1) {
+          console.log("<div class='separator'></div>");
+        }
       }
     } else {
       var spaces = "";
       for (var i = 0; i < digit - 1; i++) spaces += " ";
 
       if (commander.color) {
-        for (delta of diff) {
-          var text = "";
-          // Add line numbers
-          if (delta.lineNumberOfLhs != undefined) {
-            text += (spaces + delta.lineNumberOfLhs).substr(-digit);
-          } else {
-            text += spaces + "-";
-          }
-          text += " ";
-          if (delta.lineNumberOfRhs != undefined) {
-            text += (spaces + delta.lineNumberOfRhs).substr(-digit);
-          } else {
-            text += spaces + "-";
-          }
-          text += " ";
-
-          // Add the value of this line
-          for (value of delta.values) {
-            if (value.added) {
-              text += "\033[1;32m" + value.value + "\033[0m"
-            } else if (value.removed) {
-              text += "\033[1;31m" + value.value + "\033[0m"
+        for (var i = 0; i < diff.length; i++) {
+          var group = diff[i];
+          for (delta of group) {
+            var text = "";
+            // Add line numbers
+            if (delta.lineNumberOfLhs != undefined) {
+              text += (spaces + delta.lineNumberOfLhs).substr(-digit);
             } else {
-              text += value.value
+              text += spaces + "-";
             }
+            text += " ";
+            if (delta.lineNumberOfRhs != undefined) {
+              text += (spaces + delta.lineNumberOfRhs).substr(-digit);
+            } else {
+              text += spaces + "-";
+            }
+            text += " ";
+
+            // Add the value of this line
+            for (value of delta.values) {
+              if (value.added) {
+                text += "\033[1;32m" + value.value + "\033[0m"
+              } else if (value.removed) {
+                text += "\033[1;31m" + value.value + "\033[0m"
+              } else {
+                text += value.value
+              }
+            }
+
+            // Ouput the delta
+            console.log(text);
           }
 
-          // Ouput the delta
-          console.log(text);
+          if (i != diff.length - 1) {
+            console.log("...");
+          }
         }
       } else {
-        for (delta of diff) {
-          var text = "";
-          // Add line numbers
-          if (delta.lineNumberOfLhs != undefined) {
-            text += (spaces + delta.lineNumberOfLhs).substr(-digit);
-          } else {
-            text += spaces + "-";
-          }
-          text += " ";
-          if (delta.lineNumberOfRhs != undefined) {
-            text += (spaces + delta.lineNumberOfRhs).substr(-digit);
-          } else {
-            text += spaces + "-";
-          }
-          text += " ";
-
-          // Add the value of this line
-          for (value of delta.values) {
-            if (value.added) {
-              text += "{+" + value.value + "+}"
-            } else if (value.removed) {
-              text += "{-" + value.value + "-}"
+        for (var i = 0; i < diff.length; i++) {
+          var group = diff[i];
+          for (delta of group) {
+            var text = "";
+            // Add line numbers
+            if (delta.lineNumberOfLhs != undefined) {
+              text += (spaces + delta.lineNumberOfLhs).substr(-digit);
             } else {
-              text += value.value
+              text += spaces + "-";
             }
+            text += " ";
+            if (delta.lineNumberOfRhs != undefined) {
+              text += (spaces + delta.lineNumberOfRhs).substr(-digit);
+            } else {
+              text += spaces + "-";
+            }
+            text += " ";
+
+            // Add the value of this line
+            for (value of delta.values) {
+              if (value.added) {
+                text += "{+" + value.value + "+}"
+              } else if (value.removed) {
+                text += "{-" + value.value + "-}"
+              } else {
+                text += value.value
+              }
+            }
+
+            // Ouput the delta
+            console.log(text);
           }
 
-          // Ouput the delta
-          console.log(text);
+          if (i != diff.length - 1) {
+            console.log("...");
+          }
         }
       }
     }
