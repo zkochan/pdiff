@@ -34,7 +34,8 @@ function readFile(path) {
       var lines = [];
       var reader = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
+        terminal: false
       });
       reader.on('line', function (line) {
         lines.push(line);
