@@ -75,12 +75,12 @@ Promise.all([readFile(file1), readFile(file2)]).then(
           var text = "<div class='line'>";
           // Add line numbers
           if (delta.lineNumberOfLhs != undefined) {
-            text += "<span class='line-number lhs'>" + delta.lineNumberOfLhs + "</span>"
+            text += "<span class='line-number lhs'>" + (delta.lineNumberOfLhs + 1) + "</span>"
           } else {
             text += "<span class='line-number no-lhs'></span>"
           }
           if (delta.lineNumberOfRhs != undefined) {
-            text += "<span class='line-number rhs'>" + delta.lineNumberOfRhs + "</span>"
+            text += "<span class='line-number rhs'>" + (delta.lineNumberOfRhs + 1) + "</span>"
           } else {
             text += "<span class='line-number no-rhs'></span>"
           }
@@ -118,13 +118,13 @@ Promise.all([readFile(file1), readFile(file2)]).then(
             var text = "";
             // Add line numbers
             if (delta.lineNumberOfLhs != undefined) {
-              text += (spaces + delta.lineNumberOfLhs).substr(-digit);
+              text += (spaces + (delta.lineNumberOfLhs + 1)).substr(-digit);
             } else {
               text += spaces + "-";
             }
             text += " ";
             if (delta.lineNumberOfRhs != undefined) {
-              text += (spaces + delta.lineNumberOfRhs).substr(-digit);
+              text += (spaces + (delta.lineNumberOfRhs + 1)).substr(-digit);
             } else {
               text += spaces + "-";
             }
@@ -156,13 +156,13 @@ Promise.all([readFile(file1), readFile(file2)]).then(
             var text = "";
             // Add line numbers
             if (delta.lineNumberOfLhs != undefined) {
-              text += (spaces + delta.lineNumberOfLhs).substr(-digit);
+              text += (spaces + (delta.lineNumberOfLhs + 1)).substr(-digit);
             } else {
               text += spaces + "-";
             }
             text += " ";
             if (delta.lineNumberOfRhs != undefined) {
-              text += (spaces + delta.lineNumberOfRhs).substr(-digit);
+              text += (spaces + (delta.lineNumberOfRhs + 1)).substr(-digit);
             } else {
               text += spaces + "-";
             }

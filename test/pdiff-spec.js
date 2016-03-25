@@ -4,9 +4,9 @@ var assert = require('assert');
 var chai = require("chai");
 chai.should();
 
-describe("pdiff", function() {
-  describe('#diff', function() {
-    it("should diff on word boundaries.", function() {
+describe("pdiff", () => {
+  describe('#diff', () => {
+    it("should diff on word boundaries.", () => {
       var result = pdiff.diff("var x = 10;", "var x = 20;");
 
       result.should.deep.equal([
@@ -28,7 +28,7 @@ describe("pdiff", function() {
         }
       ])
     })
-    it("should diff lines when a delta is large.", function() {
+    it("should diff lines when a delta is large.", () => {
       var result = pdiff.diff(
         [
           "function fib(n)",
@@ -67,6 +67,27 @@ describe("pdiff", function() {
             "}"
           ].join("\n")
         }
+      ])
+    })
+    it("should extract an insertion and deletion.", () => {
+      var result = pdiff.diff(
+        "{\n  foo: 0\n}\n", "{\n  foo: 0,\n  bar: 1\n}\n"
+      )
+      result.should.deep.equal([
+        {value: "{\n"},
+        {value: "  foo: 0"},
+        {
+          removed: undefined,
+          added: true,
+          value: ","
+        },
+        {value: "\n"},
+        {
+          removed: undefined,
+          added: true,
+          value: "  bar: 1\n"
+        },
+        {value: "}\n"}
       ])
     })
   })
@@ -148,17 +169,20 @@ describe("pdiff", function() {
       diff.should.deep.equal([
         {
           lineNumberOfLhs: 0,
-          values: [{
-            removed: true,
-            value: "foo"
-          }]
+          values: [
+            {
+              removed: true,
+              value: "foo"
+            }
+          ]
         },
         {
           lineNumberOfRhs: 0,
           values: [{
-            added: true,
-            value: "bar"
-          }]
+              added: true,
+              value: "bar"
+            }
+          ]
         },
         {
           lineNumberOfRhs: 1,
@@ -191,6 +215,43 @@ describe("pdiff", function() {
         {
           lineNumberOfLhs: 2,
           lineNumberOfRhs: 1,
+          values: [{value: "}"}]
+        }
+      ])
+    })
+    it("should extract an insertion and deletion.", () => {
+      var result = pdiff.addLineNumbers(pdiff.diff(
+        "{\n  foo: 0\n}\n", "{\n  foo: 0,\n  bar: 1\n}\n"
+      ))
+      result.should.deep.equal([
+        {
+          lineNumberOfLhs: 0,
+          lineNumberOfRhs: 0,
+          values: [{value: "{"}]
+        },
+        {
+          lineNumberOfLhs: 1,
+          lineNumberOfRhs: 1,
+          values: [
+            {
+              value: "  foo: 0"
+            },
+            {
+              added: true,
+              value: ","
+            }
+          ]
+        },
+        {
+          lineNumberOfRhs: 2,
+          values: [{
+            added: true,
+            value: "  bar: 1"
+          }]
+        },
+        {
+          lineNumberOfLhs: 2,
+          lineNumberOfRhs: 3,
           values: [{value: "}"}]
         }
       ])
