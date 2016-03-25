@@ -7,8 +7,12 @@ $ npm -g install pdiff
 ## Usage
 ### Command Line Tool
 ```bash
-$ pdiff <file1> <file2>
+$ pdiff -c <file1> <file2>
 ```
+
+The screenshot is a result of `pdiff -c`.
+
+![](http://hiroakimikami.github.io/pdiff/screenshot.png)
 
 ### API
 Not yet.
