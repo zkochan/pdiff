@@ -22,7 +22,7 @@
   "dependencies": {
     "diff": "*",
     "commander": "*",
-    "readline": "*"
+    "readline": ">=1.3.0"
   },
   "devDependencies": {
     "mocha": "*",
